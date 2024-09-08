@@ -7,26 +7,37 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { dataSource } from "./db/ormconfig";
 import { SubcategoriesModule } from './subcategories/subcategories.module';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { MailModule } from './mail/mail.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
-        // CacheModule.register(),
-        TypeOrmModule.forRoot(dataSource),
+        ConfigModule.forRoot(),
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                type: 'postgres',
+                // host: 'db',
+                username: configService.get("POSTGRES_USERNAME"),
+                password: configService.get("POSTGRES_PASSWORD"),
+                database: configService.get("POSTGRES_DATABASE"),
+                port: 5432,
+                entities: ["**/*.entity{ .ts,.js}"],
+                synchronize: true,
+                // @ts-ignore
+                seeds: ['src/seeds/**/*{.ts,.js}'],
+                factories: ['src/factories/**/*{.ts,.js}'],
+            }),
+            inject: [ConfigService]
+        }),
         CountriesModule,
         CategoriesModule,
         TasksModule,
         AuthModule,
         UsersModule,
         SubcategoriesModule,
-    ],
-    // providers: [
-    //     {
-    //         provide: APP_INTERCEPTOR,
-    //         useClass: CacheInterceptor,
-    //     },
-    // ],
+        MailModule,
+    ]
 })
 export class AppModule {
 }

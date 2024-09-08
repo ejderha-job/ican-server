@@ -1,6 +1,6 @@
 import {define} from "typeorm-seeding";
-import {Tasks} from "../tasks/tasks.entity";
 import {faker} from "@faker-js/faker";
+import { Tasks } from "src/modules/tasks/entity/tasks.entity";
 
 define(Tasks, () => {
     const props = {

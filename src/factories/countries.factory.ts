@@ -1,5 +1,5 @@
 import {define} from "typeorm-seeding";
-import {Countries} from "../countries/countries.entity";
+import {Countries} from "../modules/countries/entity/countries.entity";
 import {faker} from "@faker-js/faker";
 
 define(Countries, () => {

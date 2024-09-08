@@ -1,9 +1,9 @@
 import {Factory, Seeder} from "typeorm-seeding";
-import {Categories} from "../categories/categories.entity";
-import {Subcategories} from "../subcategories/subcategories.entity";
-import {Users} from "../users/users.entity";
-import {Tasks} from "../tasks/tasks.entity";
-import {Countries} from "../countries/countries.entity";
+import {Countries} from "../modules/countries/entity/countries.entity";
+import { Users } from "src/modules/users/users.entity";
+import { Tasks } from "src/modules/tasks/entity/tasks.entity";
+import { Categories } from "src/modules/categories/entity/categories.entity";
+import { Subcategories } from "src/modules/subcategories/entity/subcategories.entity";
 
 const items = [
     {

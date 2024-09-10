@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CountriesModule } from './modules/countries/countries.module';
-import { SubcategoriesModule } from './modules/subcategories/subcategories.module';
-import { MailModule } from './modules/mail/mail.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CountriesModule } from './modules/countries/countries.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { TasksModule } from './modules/tasks/tasks.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
-import { TasksModule } from './modules/tasks/tasks.module';
+import { SubcategoriesModule } from './modules/subcategories/subcategories.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
     imports: [
@@ -35,7 +35,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
         AuthModule,
         UsersModule,
         SubcategoriesModule,
-        MailModule,
+        MailModule
     ]
 })
 export class AppModule {

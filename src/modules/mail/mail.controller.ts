@@ -15,7 +15,7 @@ export class MailController {
     @Post("/sendCode")
     async sendCode(@Body() body: SendCodeDTO, @Res() res: Response) {
         const userID = await this.MailService.sendCode(body)
-        res.cookie('demo-token', userID)
+        res.cookie('token', userID)
         res.send()
     }
 }

@@ -11,9 +11,8 @@ import { MailModule } from './modules/mail/mail.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({
                 type: 'postgres',
                 username: configService.get("POSTGRES_USERNAME"),
@@ -21,7 +20,6 @@ import { MailModule } from './modules/mail/mail.module';
                 database: configService.get("POSTGRES_DATABASE"),
                 port: 5432,
                 entities: ["**/*.entity{ .ts,.js}"],
-                synchronize: true,
             }),
             inject: [ConfigService]
         }),

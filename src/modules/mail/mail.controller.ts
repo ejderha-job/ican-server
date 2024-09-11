@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { GetCodeDTO, SendCodeDTO } from './dto/dto';
 import { MailService } from './mail.service';
+import { Response } from 'express';
 
 @Controller('mail')
 export class MailController {
@@ -12,7 +13,9 @@ export class MailController {
     }
 
     @Post("/sendCode")
-    async sendCode(@Body() body: SendCodeDTO) {
-        return await this.MailService.sendCode(body)
+    async sendCode(@Body() body: SendCodeDTO, @Res() res: Response) {
+        const userID = await this.MailService.sendCode(body)
+        res.cookie('demo-token', userID)
+        res.send()
     }
 }

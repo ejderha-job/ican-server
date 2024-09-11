@@ -1,5 +1,5 @@
 import {Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Users} from "../../users/users.entity";
+import {Users} from "../../users/entity/users.entity";
 import {taskDTO} from "../dto/tasks.dto";
 import { Subcategories } from "src/modules/subcategories/entity/subcategories.entity";
 

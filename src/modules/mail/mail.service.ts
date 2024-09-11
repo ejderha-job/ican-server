@@ -1,25 +1,24 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, UseGuards } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { createTransport } from 'nodemailer';
 import { SendCodeDTO } from './dto/dto';
 import { env } from 'process';
 import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { isEmailExist } from './guard/isEmailExist';
 
 @Injectable()
 export class MailService {
     constructor(
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private jwtService: JwtService
     ) { }
 
+    @UseGuards(isEmailExist) 
     async getCode(login: string) {
-        const user = await this.usersService.findOne(login)
-
-        if (user) {
-            throw new HttpException('Польззователь с таким логином уже зарегистрирован', HttpStatus.CONFLICT);
-        }
-
+        
         const code = Math.floor(Math.random() * 1000)
 
         await this.cacheManager.set(login, code, 60000)
@@ -51,6 +50,12 @@ export class MailService {
             throw new HttpException('invalid code', HttpStatus.BAD_REQUEST)
         }
 
-        return await this.usersService.createUser({ login: mail })
+        const user = await this.usersService.createUser({ login: mail })
+        
+        if (!user) {
+            throw new HttpException('Такой пользовател уже создан', HttpStatus.CONFLICT)
+        }
+
+        return this.jwtService.sign({ id: user.id })
     }
 }

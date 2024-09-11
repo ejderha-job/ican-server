@@ -7,7 +7,7 @@ import { Subcategories } from "src/modules/subcategories/entity/subcategories.en
 export class Tasks {
     @PrimaryGeneratedColumn()
     id: number;
-    @ManyToOne(()=>Users, (Users)=>Users.tasks, {cascade:true})
+    @ManyToOne(()=>Users, (Users)=>Users.tasks, {onDelete:"CASCADE"})
     user: Users;
     @ManyToMany(()=>Subcategories,(subcategory)=>subcategory.tasks)
     Subcategory: Subcategories

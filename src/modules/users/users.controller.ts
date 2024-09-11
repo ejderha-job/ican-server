@@ -1,4 +1,4 @@
-import {Controller, Get} from '@nestjs/common';
+import {Controller, Delete, Get} from '@nestjs/common';
 import {UsersService} from "./users.service";
 import {ApiTags} from "@nestjs/swagger";
 
@@ -6,8 +6,14 @@ import {ApiTags} from "@nestjs/swagger";
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
+    
     @Get()
     async users(){
         return await this.usersService.find()
+    }
+
+    @Delete()
+    async delete(){
+        return await this.usersService.clear()
     }
 }

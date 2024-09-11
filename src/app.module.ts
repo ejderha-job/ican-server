@@ -16,16 +16,12 @@ import { MailModule } from './modules/mail/mail.module';
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({
                 type: 'postgres',
-                // host: 'db',
                 username: configService.get("POSTGRES_USERNAME"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DATABASE"),
                 port: 5432,
                 entities: ["**/*.entity{ .ts,.js}"],
                 synchronize: true,
-                // @ts-ignore
-                seeds: ['src/seeds/**/*{.ts,.js}'],
-                factories: ['src/factories/**/*{.ts,.js}'],
             }),
             inject: [ConfigService]
         }),

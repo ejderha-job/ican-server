@@ -10,4 +10,8 @@ export class EditUser {
     @MinLength(6)
     @IsString()
     password?: string
+    @IsString()
+    fio: string
+    @IsString()
+    avatar: string
 }

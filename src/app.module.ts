@@ -19,6 +19,7 @@ import { MailModule } from './modules/mail/mail.module';
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DATABASE"),
                 port: 5432,
+                synchronize:true,
                 entities: ["**/*.entity{ .ts,.js}"],
             }),
             inject: [ConfigService]

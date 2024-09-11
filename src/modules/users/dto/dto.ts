@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString, MinLength } from "class-validator";
 
 export class CreateUserDTO {
     @IsEmail()
@@ -12,6 +12,12 @@ export class EditUser {
     password?: string
     @IsString()
     fio: string
+}
+
+export class AvatarDTO {
+    @IsNumber()
+    userID:number
+    file: Buffer
     @IsString()
-    avatar: string
+    filename: string
 }

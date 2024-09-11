@@ -3,7 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "./entity/users.entity";
 import { Repository } from "typeorm";
 import { CreateUser } from 'src/dto';
-import { EditUser } from './dto/dto';
+import { AvatarDTO, EditUser } from './dto/dto';
+import { resolve } from 'path';
+import { writeFileSync } from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -41,8 +43,15 @@ export class UsersService {
             .execute()
     }
 
-    async updateUser(user:EditUser, userID:number) {
+    async updateUser(user: EditUser, userID: number) {
         await this.usersRepository.update(userID, user)
-        return await this.usersRepository.findOneBy({id:userID})
+        return await this.usersRepository.findOneBy({ id: userID })
+    }
+
+    async avatarUpload({ filename, file, userID }: AvatarDTO) {
+        const pathName = resolve(__dirname, filename)
+        await this.usersRepository.update(userID, { avatar: pathName })
+        writeFileSync(pathName, file)
+        return pathName
     }
 }

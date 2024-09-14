@@ -10,20 +10,21 @@ export class CountriesController {
     constructor(private countriesService: CountriesService) { }
 
     @ApiOkResponse({ status: HttpStatus.OK, isArray: true, type: Countries })
-    @Get("")
+    @Get()
     async getCountries() {
         return await this.countriesService.getCountries()
     }
 
-    @ApiBadRequestResponse({ status:HttpStatus.BAD_REQUEST })
-        @ApiOkResponse({ status: HttpStatus.OK, isArray: true, type: Countries })
+    @ApiBadRequestResponse({ status: HttpStatus.BAD_REQUEST })
+    @ApiOkResponse({ status: HttpStatus.OK, isArray: true, type: Countries })
     @ApiBody({ type: CountriesDTO })
-    @Post("")
+    @Post()
     async createCountries(@Body() body: CountriesDTO) {
         return await this.countriesService.createCountries(body.countries)
     }
 
-    @Delete("")
+    @ApiOkResponse({ status: HttpStatus.OK })
+    @Delete()
     async clearCountries() {
         return await this.countriesService.clearCountries()
     }

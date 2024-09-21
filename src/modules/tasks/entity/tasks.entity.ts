@@ -13,4 +13,6 @@ export class Tasks {
     Subcategory: Subcategories
     @Column("simple-json")
     props: taskDTO
+    @ManyToMany(()=>Users, (users) => users.tasksWhereImExecuter)
+    executers: Users[]
 }

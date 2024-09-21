@@ -36,4 +36,8 @@ export class TasksService {
         newTask.user = await this.usersService.findById(userID)
         return await this.tasksRepository.save(newTask)
     }
+
+    async takeTask(userID: number, taskID: number): Promise<Tasks> {
+        return new Tasks()
+    }
 }

@@ -5,6 +5,7 @@ import { In, Repository } from "typeorm";
 import { UsersService } from "../users/users.service";
 import { createTaskDTO, getTaskDTO } from "./dto/tasks.dto";
 import { SubcategoriesService } from "../subcategories/subcategories.service";
+import { log } from 'console';
 
 @Injectable()
 export class TasksService {
@@ -38,6 +39,9 @@ export class TasksService {
     }
 
     async takeTask(userID: number, taskID: number): Promise<Tasks> {
-        return new Tasks()
+        const task = await this.tasksRepository.findOneBy({ id: taskID })
+        const user = await this.usersService.findById(userID)
+        await this.tasksRepository.update(taskID, {...task, executers:[...task.executers, user]})
+        return task
     }
 }

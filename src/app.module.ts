@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CountriesModule } from './modules/countries/countries.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { TasksModule } from './modules/tasks/tasks.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
-import { SubcategoriesModule } from './modules/subcategories/subcategories.module';
-import { MailModule } from './modules/mail/mail.module';
+import { CountriesModule } from './components/countries/module/countries.module';
+import { CategoriesModule } from './components/categories/module/categories.module';
+import { TasksModule } from './components/tasks/module/tasks.module';
+import { AuthModule } from './components/auth/module/auth.module';
+import { UsersModule } from './components/users/users.module';
+import { SubcategoriesModule } from './components/subcategories/module/subcategories.module';
+import { MailModule } from './components/mail/modules/mail.module';
 
 @Module({
     imports: [

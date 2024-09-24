@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { plainToClass } from "class-transformer"
 import { validate } from "class-validator"
-import { LoginDTO } from "src/modules/auth/dto/dto"
+import { LoginDTO } from "src/common/dto/auth.dto"
 
 @Injectable()
 export class MyAuthGuard implements CanActivate {

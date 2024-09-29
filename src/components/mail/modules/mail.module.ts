@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { UsersModule } from '../../users/users.module';
+import { UsersModule } from '../../users/module/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { isEmailExist } from '../../../guard/isEmailExist';
 import { ConfigService } from '@nestjs/config';

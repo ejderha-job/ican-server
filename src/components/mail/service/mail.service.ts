@@ -4,9 +4,9 @@ import { Cache } from 'cache-manager';
 import { createTransport } from 'nodemailer';
 import { env } from 'process';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/components/users/users.service';
 import { isEmailExist } from 'src/guard/isEmailExist';
 import { SendCodeDTO } from 'src/common/dto/mail.dto';
+import { UsersService } from 'src/components/users/service/users.service';
 
 @Injectable()
 export class MailService {
@@ -43,19 +43,19 @@ export class MailService {
         return "Код был  отправлен вам на почту"
     }
 
-    async sendCode({ code: inputCode, mail }: SendCodeDTO) {
-        const correctCode = await this.cacheManager.get(mail)
+    // async sendCode({ code: inputCode, mail }: SendCodeDTO) {
+    //     const correctCode = await this.cacheManager.get(mail)
 
-        if (correctCode != inputCode) {
-            throw new HttpException('invalid code', HttpStatus.BAD_REQUEST)
-        }
+    //     if (correctCode != inputCode) {
+    //         throw new HttpException('invalid code', HttpStatus.BAD_REQUEST)
+    //     }
 
-        const user = await this.usersService.createUser({ login: mail })
+    //     const user = await this.usersService.createUser({ login: mail })
         
-        if (!user) {
-            throw new HttpException('Такой пользовател уже создан', HttpStatus.CONFLICT)
-        }
+    //     if (!user) {
+    //         throw new HttpException('Такой пользовател уже создан', HttpStatus.CONFLICT)
+    //     }
 
-        return this.jwtService.sign({ id: user.id })
-    }
+    //     return this.jwtService.sign({ id: user.id })
+    // }
 }

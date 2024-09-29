@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { createTaskDTO, getTaskDTO, takeTaskDTO } from 'src/common/dto/tasks.dto';
 import { SubcategoriesService } from 'src/components/subcategories/service/subcategories.service';
-import { UsersService } from 'src/components/users/users.service';
+import { UsersService } from 'src/components/users/service/users.service';
 import { TasksEntity } from 'src/typeorm/tasks.entity';
 import { In, Repository } from "typeorm";
 
@@ -41,6 +41,6 @@ export class TasksService {
         const task = await this.tasksRepository.findOneBy({ id: taskID })
         const user = await this.usersService.findById(userID)
         await this.tasksRepository.update(taskID, { ...task, executers: [...task.executers, user] })
-        await this.usersService.updateUser({...user,    }, userID)
+        await this.usersService.updateUser({ ...user, tasksWhereImExecuter: [...user.tasksWhereImExecuter, task] }, userID)
     }
 }

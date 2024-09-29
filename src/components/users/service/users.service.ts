@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateUser } from 'src/dto';
-import { AvatarDTO, EditUser } from '../../common/dto/users.dto';
+import { AvatarDTO, CreateUserDTO, EditUserDTO } from '../../../common/dto/users.dto';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 import { UserEntity } from 'src/typeorm/users.entity';
+import {hashSync} from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -24,16 +24,14 @@ export class UsersService {
         return await this.usersRepository.find({ relations: { tasks: true } })
     }
 
-    async createUser(user: CreateUser) {
+    async createUser(user: CreateUserDTO) {
         const userAlredyExist = await this.usersRepository.findOneBy({ login: user.login })
         if (userAlredyExist) {
             return null
         }
-        const newUser = new UserEntity()
-        newUser.login = user.login
-        newUser.password = user.password
-        newUser.tasks = []
-        return this.usersRepository.save(newUser)
+        const hash = hashSync(user.password, 6)
+        const newUser = await this.usersRepository.insert({ login: user.login, password: hash })
+        return newUser
     }
 
     async clear() {
@@ -43,7 +41,7 @@ export class UsersService {
             .execute()
     }
 
-    async updateUser(user: EditUser, userID: number) {
+    async updateUser(user: EditUserDTO, userID: number) {
         await this.usersRepository.update(userID, user)
         return await this.usersRepository.findOneBy({ id: userID })
     }

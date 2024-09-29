@@ -1,35 +1,30 @@
-import {Injectable} from '@nestjs/common';
-import {JwtService} from "@nestjs/jwt";
-import { LoginUser } from 'src/common/dto/auth.dto';
-import { UsersService } from 'src/components/users/users.service';
-import { CreateUser } from 'src/dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from "@nestjs/jwt";
+import { LoginDTO } from 'src/common/dto/auth.dto';
+import { CreateUserDTO } from 'src/common/dto/users.dto';
+import { UsersService } from 'src/components/users/service/users.service';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtService) {
     }
 
-    async validateUser(username: string, password: string) {
+    async login({ password, username }: LoginDTO) {
         const user = await this.usersService.findOne(username)
-        if (user && user.password === password) {
-            return user
+        if (!user) {
+            throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
         }
-        return null
+        if (!await compare(password, user.password)) {
+            throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
+        }
+        return this.jwtService.sign({ id: user.id })
     }
 
-    async login(user:LoginUser) {
-        const payload = {
-            username: user.login, id: user.id
-        }
-        return {
-            access_token: this.jwtService.sign(payload)
-        }
-    }
-
-    async register(user:CreateUser) {
+    async register(user: CreateUserDTO) {
         const newUser = await this.usersService.createUser(user)
-        if (newUser){
-            return newUser.id
-        }
+        // if (newUser) {
+        //     return newUser.id
+        // }
     }
 }

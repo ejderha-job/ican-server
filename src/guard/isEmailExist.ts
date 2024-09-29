@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Request } from "express";
-import { UsersService } from "src/components/users/users.service";
+import { UsersService } from "src/components/users/service/users.service";
 
 @Injectable()
 export class isEmailExist implements CanActivate {

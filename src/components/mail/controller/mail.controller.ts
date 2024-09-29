@@ -15,10 +15,10 @@ export class MailController {
         return await this.MailService.getCode(body.mail)
     }
 
-    @Post("/sendCode")
-    async sendCode(@Body() body: SendCodeDTO, @Res() res: Response) {
-        const userID = await this.MailService.sendCode(body)
-        res.cookie('token', userID)
-        res.send()
-    }
+    // @Post("/sendCode")
+    // async sendCode(@Body() body: SendCodeDTO, @Res() res: Response) {
+    //     const userID = await this.MailService.sendCode(body)
+    //     res.cookie('token', userID)
+    //     res.send()
+    // }
 }

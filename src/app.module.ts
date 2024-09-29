@@ -5,7 +5,7 @@ import { CountriesModule } from './components/countries/module/countries.module'
 import { CategoriesModule } from './components/categories/module/categories.module';
 import { TasksModule } from './components/tasks/module/tasks.module';
 import { AuthModule } from './components/auth/module/auth.module';
-import { UsersModule } from './components/users/users.module';
+import { UsersModule } from './components/users/module/users.module';
 import { SubcategoriesModule } from './components/subcategories/module/subcategories.module';
 import { MailModule } from './components/mail/modules/mail.module';
 
@@ -19,7 +19,6 @@ import { MailModule } from './components/mail/modules/mail.module';
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DATABASE"),
                 port: 5432,
-                synchronize:true,
                 entities: ["**/*.entity{ .ts,.js}"],
             }),
             inject: [ConfigService]

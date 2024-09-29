@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { UsersService } from "../../users/users.service"
+import { UsersService } from "../../users/service/users.service"
 import { TasksService } from "./tasks.service"
 import { SubcategoriesService } from "src/components/subcategories/service/subcategories.service"
 import { TasksController } from "../controller/tasks.controller"

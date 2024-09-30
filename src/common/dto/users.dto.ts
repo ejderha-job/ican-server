@@ -1,36 +1,47 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNumber, IsOptional, IsString, MinLength } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 import { TasksEntity } from "src/typeorm/tasks.entity";
 
 export class CreateUserDTO {
     @ApiProperty()
     @IsString()
-    login:string
+    login: string
     @ApiProperty()
     @IsOptional()
-    @IsString()
-    password?:string
-}
-
-export class EditUserDTO {
-    @ApiProperty()
-    @IsOptional()
-    @MinLength(6)
     @IsString()
     password?: string
-    @IsString()
-    @ApiProperty()
-    fio: string
-    @ApiProperty()
-    @IsOptional()
-    @IsArray()
-    tasksWhereImExecuter:Array<TasksEntity>
 }
 
 export class AvatarDTO {
     @IsNumber()
-    userID:number
+    userID: number
     file: Buffer
     @IsString()
     filename: string
+}
+
+export class UpdateUserDTO {
+    @IsOptional()
+    fio?: string
+    @IsOptional()
+    avatar?: string
+    @IsOptional()
+    login?: string
+    @IsOptional()
+    password?: string
+    @IsOptional()
+    tasks?: Array<TasksEntity>;
+    @IsOptional()
+    tasksWhereImExecuter?: TasksEntity[]
+}
+
+export class InsertUserDTO {
+    @IsOptional()
+    fio?: string
+    @IsOptional()
+    avatar?: string
+    @IsOptional()
+    login?: string
+    @IsOptional()
+    password?: string
 }

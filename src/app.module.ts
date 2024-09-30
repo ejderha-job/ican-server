@@ -15,6 +15,7 @@ import { MailModule } from './components/mail/modules/mail.module';
         TypeOrmModule.forRootAsync({
             useFactory: async (configService: ConfigService) => ({
                 type: 'postgres',
+                autoLoadEntities:true,
                 username: configService.get("POSTGRES_USERNAME"),
                 password: configService.get("POSTGRES_PASSWORD"),
                 database: configService.get("POSTGRES_DATABASE"),

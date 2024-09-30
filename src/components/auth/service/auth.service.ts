@@ -10,16 +10,16 @@ export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtService) {
     }
 
-    async login({ password, username }: LoginDTO) {
-        const user = await this.usersService.findOne(username)
-        if (!user) {
-            throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
-        }
-        if (!await compare(password, user.password)) {
-            throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
-        }
-        return this.jwtService.sign({ id: user.id })
-    }
+    // async login({ password, username }: LoginDTO) {
+    //     const user = await this.usersService.findOne(username)
+    //     if (!user) {
+    //         throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
+    //     }
+    //     if (!await compare(password, user.password)) {
+    //         throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
+    //     }
+    //     return this.jwtService.sign({ id: user.id })
+    // }
 
     async register(user: CreateUserDTO) {
         const newUser = await this.usersService.createUser(user)

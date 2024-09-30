@@ -11,13 +11,13 @@ export class AuthController {
     constructor(private authService: AuthService) {
     }
 
-    @ApiOperation({ summary: "login" })
-    @ApiResponse({ status: 200, description: "jwt token" })
-    @ApiResponse({ status: 401, description: "unauthorized" })
-    @Post('login')
-    async login(@Body() login:LoginDTO) {
-        return this.authService.login(login)
-    }
+    // @ApiOperation({ summary: "login" })
+    // @ApiResponse({ status: 200, description: "jwt token" })
+    // @ApiResponse({ status: 401, description: "unauthorized" })
+    // @Post('login')
+    // async login(@Body() login:LoginDTO) {
+    //     return this.authService.login(login)
+    // }
 
     // @ApiOperation({ summary: "register" })
     // @Post('register')

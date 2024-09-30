@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from "../service/users.service";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { CreateUserDTO, EditUserDTO } from '../../../common/dto/users.dto';
+import { CreateUserDTO } from '../../../common/dto/users.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -30,7 +30,7 @@ export class UsersController {
     }
 
     @Patch()
-    async update(@Req() req: Request, @Body() body: EditUserDTO) {
+    async update(@Req() req: Request, @Body() body) {
         const userID = this.jwtService.decode(req.cookies.token).id
         return await this.usersService.updateUser(body, userID)
     }

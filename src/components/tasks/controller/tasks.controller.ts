@@ -10,13 +10,13 @@ export class TasksController {
     constructor(private tasksService: TasksService) {
     }
 
-    @UseGuards(JwtAuthGuard)
-    @ApiBody({ type: createTaskDTO })
-    @ApiCookieAuth()
-    @Post()
-    async createTasks(@Body() task: createTaskDTO, @Req() req) {
-        return this.tasksService.createTasks(task, req.user.id)
-    }
+    // @UseGuards(JwtAuthGuard)
+    // @ApiBody({ type: createTaskDTO })
+    // @ApiCookieAuth()
+    // @Post()
+    // async createTasks(@Body() task: createTaskDTO, @Req() req) {
+    //     return this.tasksService.createTasks(task, req.user.id)
+    // }
 
     @Get()
     async getTasks(@Query() params) {

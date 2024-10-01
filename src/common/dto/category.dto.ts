@@ -1,6 +1,6 @@
-import { TasksEntity } from "src/typeorm/tasks.entity";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class CategoryDto {
+export class CreateCategoryDto {
+    @ApiProperty()
     name: string;
-    tasks?: TasksEntity[]
 }

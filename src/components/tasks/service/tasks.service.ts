@@ -22,25 +22,23 @@ export class TasksService {
         return await this.tasksRepository.find()
     }
 
+    async createTasks(task: createTaskDTO, userID: number) {
+        const Subcategory = await this.subcategoriesService.findOne(task.categoryID)
+        if (!Subcategory) throw new HttpException('Category not found', HttpStatus.BAD_REQUEST)
+        const newTask = new TasksEntity()
+        newTask.props = {
+            name: task.task.name,
+            price: task.task.price,
+            description: task.task.description
+        }
+        newTask.Subcategory = Subcategory
+        newTask.user = await this.usersService.findById(userID)
+        return await this.tasksRepository.save(newTask)
+    }
 
-    // async createTasks(task: createTaskDTO, userID: number) {
-    //     const Subcategory = await this.subcategoriesService.findOne(task.categoryID)
-    //     if (!Subcategory) throw new HttpException('Category not found', HttpStatus.BAD_REQUEST)
-    //     const newTask = new TasksEntity()
-    //     newTask.props = {
-    //         name: task.task.name,
-    //         price: task.task.price,
-    //         description: task.task.description
-    //     }
-    //     newTask.Subcategory = Subcategory
-    //     newTask.user = await this.usersService.findById(userID)
-    //     return await this.tasksRepository.save(newTask)
-    // }
-
-    // async takeTask({ taskID, userID }: takeTaskDTO) {
-    //     const task = await this.tasksRepository.findOneBy({ id: taskID })
-    //     const user = await this.usersService.findById(userID)
-    //     await this.tasksRepository.update(taskID, { ...task, executers: [...task.executers, user] })
-    //     await this.usersService.updateUser({ ...user, tasksWhereImExecuter: [...user.tasksWhereImExecuter, task] }, userID)
-    // }
+    async takeTask({ taskID, userID }: takeTaskDTO) {
+        const task = await this.tasksRepository.findOneBy({ id: taskID })
+        const user = await this.usersService.findById(userID)
+        await this.tasksRepository.update(taskID, { ...task, executers: [...task.executers, user] })
+    }
 }

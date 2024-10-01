@@ -4,7 +4,7 @@ import { TasksEntity } from "./tasks.entity";
 
 @Entity()
 export class SubcategoryEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: number
     @Column()
     title:string

@@ -29,3 +29,9 @@ export class takeTaskDTO {
     @IsNotEmpty()
     taskID: number
 }
+
+export class takeTaskControllerDTO {
+    @IsNumber()
+    @IsNotEmpty()
+    taskID: number
+}

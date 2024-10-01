@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { GithubAuthGuard } from 'src/guard/github-auth';
 import { AuthService } from '../service/auth.service';
 import { LoginDTO } from 'src/common/dto/auth.dto';
@@ -11,21 +11,23 @@ export class AuthController {
     constructor(private authService: AuthService) {
     }
 
-    // @ApiOperation({ summary: "login" })
-    // @ApiResponse({ status: 200, description: "jwt token" })
-    // @ApiResponse({ status: 401, description: "unauthorized" })
-    // @Post('login')
-    // async login(@Body() login:LoginDTO) {
-    //     return this.authService.login(login)
-    // }
+    @ApiOperation({ summary: "login" })
+    @ApiResponse({ status: 200, description: "jwt token" })
+    @ApiResponse({ status: 401, description: "unauthorized" })
+    @Post('login')
+    async login(@Body() login:LoginDTO) {
+        return await this.authService.login(login)
+    }
 
-    // @ApiOperation({ summary: "register" })
-    // @Post('register')
-    // async register(@Body() user: CreateUserDTO) {
-    //     const userID = await this.authService.register(user);
-    //     if (userID) return userID
-    //     throw new HttpException("Не удалось создать пользователя", HttpStatus.BAD_REQUEST)
-    // }
+    @ApiOperation({ summary: "register" })
+    @Post('register')
+    async register(@Body() user: CreateUserDTO) {
+        const userID = await this.authService.register(user);
+        if (!userID) {
+            throw new HttpException("Не удалось создать пользователя", HttpStatus.BAD_REQUEST)
+        }
+        return userID
+    }
 
     @ApiOperation({ summary: "login throw github" })
     @UseGuards(GithubAuthGuard)

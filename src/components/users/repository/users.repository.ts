@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { log } from "console";
 import { InsertUserDTO, UpdateUserDTO } from "src/common/dto/users.dto";
 import { UserEntity } from "src/typeorm/users.entity";
 import { Repository } from "typeorm";
@@ -18,7 +19,7 @@ export class UserRepository {
     }
 
     async getByLogin(login: string) {
-        return await this.usersRepository.find({ where: { login }, relations: { tasks: true } })
+        return (await this.usersRepository.find({ where: { login }, relations: { tasks: true } }))[0]
     }
 
     async getByID(id: number) {
@@ -30,6 +31,6 @@ export class UserRepository {
     }
 
     async insert(user:InsertUserDTO) {
-        await this.usersRepository.insert(user)
+        return (await this.usersRepository.insert(user)).raw[0].id
     }
 }

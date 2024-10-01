@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AvatarDTO, CreateUserDTO, UpdateUserDTO } from '../../../common/dto/users.dto';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 import { hashSync } from 'bcrypt';
 import { UserRepository } from '../repository/users.repository';
+import { log } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -14,21 +15,20 @@ export class UsersService {
     }
 
     async findById(id: number) {
-        return await this.userRepository.getByID(id)
+        return await this.userRepository.getByID(id)[0]
     }
 
     async find() {
         return this.userRepository.getList()
     }
 
-    async createUser(user: CreateUserDTO) {
-        const userAlredyExist = await this.findOne(user.login)
+    async createUser({login, password}: CreateUserDTO) {
+        const userAlredyExist = await this.findOne(login)
         if (userAlredyExist) {
-            return null
+            throw new HttpException("Пользователь с таким именем уже есть", HttpStatus.BAD_REQUEST)
         }
-        const hash = hashSync(user.password, 6)
-        const newUser = await this.userRepository.insert({ login: user.login, password: hash })
-        return newUser
+        const hash = hashSync(password, 6)
+        return await this.userRepository.insert({ login: login, password: hash })
     }
 
     async clear() {

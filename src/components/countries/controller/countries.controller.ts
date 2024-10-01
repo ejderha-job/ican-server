@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { CountriesService } from '../service/countries.service';
 import { CountryEntity } from 'src/typeorm/countries.entity';
 import { CountriesDTO } from 'src/common/dto/countries.dto';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
 @ApiTags('countries')
 @Controller('countries')
@@ -23,6 +24,7 @@ export class CountriesController {
         return await this.countriesService.createCountries(body.countries)
     }
 
+    @UseGuards(JwtAuthGuard)
     @ApiOkResponse({ status: HttpStatus.OK })
     @Delete()
     async clearCountries() {

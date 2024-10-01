@@ -26,7 +26,7 @@ export class UsersController {
     @ApiOperation({ summary: "create" })
     @Post()
     async create(@Body() createUser: CreateUserDTO) {
-        return this.usersService.createUser(createUser)
+        return await this.usersService.createUser(createUser)
     }
 
     @Patch()

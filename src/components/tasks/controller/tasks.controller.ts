@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiCookieAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { Body, CanActivate, Controller, Delete, ExecutionContext, Get, HttpException, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiCookieAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TasksService } from '../service/tasks.service';
-import { createTaskDTO, takeTaskControllerDTO, takeTaskDTO } from 'src/common/dto/tasks.dto';
+import { createTaskDTO, takeTaskControllerDTO } from 'src/common/dto/tasks.dto';
+import { Request } from 'express';
+import { IsAuth } from 'src/guard/isAuth';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -10,13 +11,17 @@ export class TasksController {
     constructor(private tasksService: TasksService) {
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(IsAuth)
     @ApiBody({ type: createTaskDTO })
     @ApiCookieAuth()
     @ApiOperation({ summary: "create task" })
-    @Post()
-    async createTasks(@Body() task: createTaskDTO, @Req() req) {
-        return this.tasksService.createTasks(task, req.user.id)
+    @Post('create')
+    async createTasks(@Body() task: createTaskDTO, @Req() req: Request) {
+        if (!Boolean(req.headers.authorization)) {
+            throw new HttpException("unuftorizated", HttpStatus.UNAUTHORIZED)   
+        }
+        // @ts-ignore
+        return this.tasksService.createTasks(task, req.userID)
     }
 
     @ApiOperation({ summary: "tasks list" })
@@ -30,9 +35,16 @@ export class TasksController {
     }
 
     @Post("take")
+    @UseGuards(IsAuth)
     @ApiOperation({ summary: "take task" })
-    @UseGuards(JwtAuthGuard)
-    async takeTask(@Req() req, @Body() body: takeTaskControllerDTO) {
-        await this.tasksService.takeTask({ taskID: body.taskID, userID: req.user.id })
+    @ApiQuery({name:"taskID"})
+    async takeTask(@Req() req:Request) {
+        // @ts-ignore
+        await this.tasksService.takeTask({ taskID: req.query.taskID, userID: req.userID })
+    }
+
+    @Delete()   
+    async DeleteTasks(){
+        this.tasksService.removeAll()
     }
 }

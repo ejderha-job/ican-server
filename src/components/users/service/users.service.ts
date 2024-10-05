@@ -4,7 +4,7 @@ import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 import { hashSync } from 'bcrypt';
 import { UserRepository } from '../repository/users.repository';
-import { log } from 'console';
+import { UserEntity } from 'src/typeorm/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +14,8 @@ export class UsersService {
         return await this.userRepository.getByLogin(login)
     }
 
-    async findById(id: number) {
-        return await this.userRepository.getByID(id)[0]
+    async findById(id: number): Promise<UserEntity> {
+        return (await this.userRepository.getByID(id))[0]
     }
 
     async find() {

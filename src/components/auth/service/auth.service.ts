@@ -10,8 +10,8 @@ export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtService) {
     }
 
-    async login({ password, username }: LoginDTO) {
-        const user = await this.usersService.findOne(username)
+    async login({ password, login }: LoginDTO) {
+        const user = await this.usersService.findOne(login)
         if (!user) {
             throw new HttpException('Forbidden', HttpStatus.BAD_REQUEST)
         }

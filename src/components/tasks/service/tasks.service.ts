@@ -17,9 +17,9 @@ export class TasksService {
 
     async getTasks(dto: getTaskDTO) {
         if (dto.subcategoriesIDs) {
-            return await this.tasksRepository.find({ where: { id: In(dto.subcategoriesIDs) } })
+            return await this.tasksRepository.find({ where: { id: In(dto.subcategoriesIDs) }, relations: {user:true} })
         }
-        return await this.tasksRepository.find()
+        return await this.tasksRepository.find({relations:{executers:true, user:true}})
     }
 
     async createTasks(task: createTaskDTO, userID: number) {
@@ -37,8 +37,18 @@ export class TasksService {
     }
 
     async takeTask({ taskID, userID }: takeTaskDTO) {
-        const task = await this.tasksRepository.findOneBy({ id: taskID })
+        const task = (await this.tasksRepository.find({where:{id:taskID}, relations:{executers:true}}))[0] as TasksEntity
         const user = await this.usersService.findById(userID)
-        await this.tasksRepository.update(taskID, { ...task, executers: [...task.executers, user] })
+        if (task.executers.length) {
+            task.executers = [user, ...task.executers]
+        } else {
+            task.executers = [user]
+        }
+        await this.tasksRepository.save(task)
+        return task
+    }
+
+    async removeAll(){
+        this.tasksRepository.delete({})
     }
 }

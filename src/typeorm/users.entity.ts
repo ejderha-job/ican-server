@@ -1,9 +1,9 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TasksEntity } from "./tasks.entity";
 
 @Entity()
 export class UserEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: number
     @Column({ nullable: true })
     fio: string
@@ -15,6 +15,7 @@ export class UserEntity {
     password: string
     @OneToMany(() => TasksEntity, Tasks => Tasks.user, { onDelete: "CASCADE" })
     tasks: Array<TasksEntity>;
+    @JoinTable()
     @ManyToMany(() => TasksEntity, (tasks) => tasks.executers)
     tasksWhereImExecuter: TasksEntity[]
 }

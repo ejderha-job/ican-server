@@ -10,7 +10,7 @@ export class LoginDTO {
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    username: string
+    login: string
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

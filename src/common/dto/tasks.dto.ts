@@ -1,19 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsNumber } from "class-validator"
+import { Type } from "class-transformer"
+import { IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator"
 
 export class taskDTO {
+    @IsString()
     @ApiProperty()
     name: string
+    @IsNumber()
     @ApiProperty()
     price: number
     @ApiProperty()
+    @IsString()
     description: string
 }
 
 export class createTaskDTO {
+    @IsNumber()
     @ApiProperty()
     categoryID: number
     @ApiProperty()
+    @ValidateNested()
+    @Type(()=>taskDTO)
     task: taskDTO
 }
 

@@ -45,3 +45,12 @@ export class InsertUserDTO {
     @IsOptional()
     password?: string
 }
+
+export class ChooseExecuterDTO {
+    @IsNumber()
+    @ApiProperty()
+    userID: number
+    @IsNumber()
+    @ApiProperty()
+    taskID: number
+}

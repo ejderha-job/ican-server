@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {UsersModule} from "../../users/module/users.module";
 import { TasksEntity } from 'src/typeorm/tasks.entity';
@@ -11,9 +11,9 @@ import { IsAuth } from 'src/guard/isAuth';
 
 @Module({
     imports: [ 
+        forwardRef(() => UsersModule),
         TypeOrmModule.forFeature([TasksEntity]), 
-        SubcategoriesModule, 
-        UsersModule, 
+        SubcategoriesModule,  
         JwtModule.registerAsync({
         useFactory: async (configService: ConfigService) => ({
             secret: configService.get("JWT_SECRET"),

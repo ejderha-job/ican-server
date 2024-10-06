@@ -54,3 +54,15 @@ export class ChooseExecuterDTO {
     @ApiProperty()
     taskID: number
 }
+
+export class chooseExecuterDTO {
+    @IsNumber()
+    @ApiProperty()
+    MyID: number
+    @IsNumber()
+    @ApiProperty()
+    TaskID: number
+    @IsNumber()
+    @ApiProperty()
+    ExecuterID: number
+}

@@ -1,14 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AvatarDTO, CreateUserDTO, UpdateUserDTO } from '../../../common/dto/users.dto';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { AvatarDTO, chooseExecuterDTO, CreateUserDTO, UpdateUserDTO } from '../../../common/dto/users.dto';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 import { hashSync } from 'bcrypt';
 import { UserRepository } from '../repository/users.repository';
 import { UserEntity } from 'src/typeorm/users.entity';
+import { TasksService } from 'src/components/tasks/service/tasks.service';
 
 @Injectable()
 export class UsersService {
-    constructor(private userRepository: UserRepository) { }
+    constructor(private userRepository: UserRepository, @Inject(forwardRef(()=>TasksService)) private tasksService: TasksService) { }
 
     async findOne(login: string) {
         return await this.userRepository.getByLogin(login)
@@ -45,5 +46,19 @@ export class UsersService {
         await this.userRepository.update(userID, { avatar: pathName })
         writeFileSync(pathName, file)
         return pathName
+    }
+
+    async chooseExecuter({ExecuterID, MyID, TaskID}:chooseExecuterDTO){
+        const task = await this.tasksService.findOne(TaskID)
+        if (task.user.id !== MyID) {
+            throw new HttpException("", HttpStatus.UNAUTHORIZED)
+        }
+        if (ExecuterID === MyID) {
+            throw new HttpException("Вы не можете назначить себя исполнителем своей задачи", HttpStatus.BAD_REQUEST)
+        }        
+        const user = await this.userRepository.getByID(ExecuterID)[0] as UserEntity
+        user.tasksWhereImExecuter.push(task)
+        await this.userRepository.save(user)
+        return "OK"
     }
 }

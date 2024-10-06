@@ -1,7 +1,7 @@
-import { Body, CanActivate, Controller, Delete, ExecutionContext, Get, HttpException, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiCookieAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TasksService } from '../service/tasks.service';
-import { createTaskDTO, takeTaskControllerDTO } from 'src/common/dto/tasks.dto';
+import { createTaskDTO } from 'src/common/dto/tasks.dto';
 import { Request } from 'express';
 import { IsAuth } from 'src/guard/isAuth';
 
@@ -46,5 +46,12 @@ export class TasksController {
     @Delete()   
     async DeleteTasks(){
         this.tasksService.removeAll()
+    }
+
+    @Get("my")
+    @UseGuards(IsAuth)
+    async getMyTasks(@Req() req:Request) {
+        // @ts-ignore
+        return await this.tasksService.getTasks({}, req.userID)
     }
 }

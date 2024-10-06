@@ -1,25 +1,33 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { createTaskDTO, getTaskDTO, takeTaskDTO } from 'src/common/dto/tasks.dto';
 import { SubcategoriesService } from 'src/components/subcategories/service/subcategories.service';
 import { UsersService } from 'src/components/users/service/users.service';
 import { TasksEntity } from 'src/typeorm/tasks.entity';
-import { In, Repository } from "typeorm";
+import { FindManyOptions, In, Repository } from "typeorm";
 
 @Injectable()
 export class TasksService {
     constructor(
         private subcategoriesService: SubcategoriesService,
+        @Inject(forwardRef(()=>UsersService))
         private usersService: UsersService,
         @InjectRepository(TasksEntity) private tasksRepository: Repository<TasksEntity>
     ) {
     }
+    async findOne(id: number) {
+        return await this.tasksRepository.findOne({ where: { id }, relations: { user: true } })
+    }
 
-    async getTasks(dto: getTaskDTO) {
+    async getTasks(dto: getTaskDTO, userID?: number) {
+        const option:FindManyOptions<TasksEntity> = {relations:{executers:true, user:true}}
         if (dto.subcategoriesIDs) {
-            return await this.tasksRepository.find({ where: { id: In(dto.subcategoriesIDs) }, relations: {user:true} })
+            option.where = { id: In(dto.subcategoriesIDs) }
         }
-        return await this.tasksRepository.find({relations:{executers:true, user:true}})
+        if (userID) {
+            option.where = { ...option.where, user: { id: userID } }
+        }
+        return await this.tasksRepository.find(option)
     }
 
     async createTasks(task: createTaskDTO, userID: number) {

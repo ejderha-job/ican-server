@@ -40,8 +40,7 @@ export class UsersController {
     async chooseExecuter(@Req() req: Request, @Body() {taskID, userID}:ChooseExecuterDTO) {
         // @ts-ignore
         const im = req.userID
-        
-        return im
+        await this.usersService.chooseExecuter({ExecuterID: userID, MyID: im, TaskID: taskID})
     }
 
     @Post("avatar")

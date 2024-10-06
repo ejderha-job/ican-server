@@ -32,4 +32,8 @@ export class UserRepository {
     async insert(user:InsertUserDTO) {
         return (await this.usersRepository.insert(user)).raw[0].id
     }
+
+    async save(user:UserEntity) {
+        await this.usersRepository.save(user)
+    }
 }
